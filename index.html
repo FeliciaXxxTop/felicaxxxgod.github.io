@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:title" content="Image Hosting Platform" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="" id="og-image" />
-  <meta property="og:description" content="Upload and share your images with embeds." />
-  <title>Image Hosting</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Share Image</title>
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="Uploaded Image">
+    <meta property="og:description" content="View and share your uploaded image.">
+    <meta property="og:image" content="{{ image_url }}">
+    <meta property="og:url" content="{{ request_url }}">
+    <meta property="og:type" content="website">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .image-container {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+        }
+        .upload-form {
+            margin: 20px auto;
+        }
+        input[type="file"] {
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Image Hosting Platform</h1>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="image" name="image" required />
-    <button type="submit">Upload Image</button>
-  </form>
-  <div id="result" style="margin-top: 20px;"></div>
+    <h1>Upload and Share Your Image</h1>
 
-  <script>
-    const form = document.getElementById('uploadForm');
-    const resultDiv = document.getElementById('result');
+    <!-- Image Upload Form -->
+    <div class="upload-form">
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" required>
+            <button type="submit">Upload Image</button>
+        </form>
+    </div>
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fileInput = document.getElementById('image').files[0];
-      const formData = new FormData();
-      formData.append('image', fileInput);
-
-      const response = await fetch('/upload', { method: 'POST', body: formData });
-      const data = await response.json();
-
-      resultDiv.innerHTML = `
-        <h2>Image Uploaded Successfully!</h2>
-        <p>Direct Link: <a href="${data.url}" target="_blank">${data.url}</a></p>
-        <p>Embed Code:</p>
-        <textarea readonly style="width: 100%; height: 50px;">
-          <img src="${data.url}" alt="Uploaded Image" />
-        </textarea>
-      `;
-    });
-  </script>
+    <!-- Image Display -->
+    {% if image_url %}
+    <div class="image-container">
+        <h2>Uploaded Image</h2>
+        <img src="{{ image_url }}" alt="Uploaded Image">
+    </div>
+    {% endif %}
 </body>
 </html>
