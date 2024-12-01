@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const modeSelect = document.getElementById('mode-select').value;
 
     try {
-      const response = await fetch(`https://scriptblox.com/api/script/search?q=${searchInput}&script%20name=5&mode=${modeSelect}&page=${page}`);
+      const response = await fetch(`https://scriptblox.com/api/script/search?q=${searchInput}&scriptname=5&mode=${modeSelect}&page=${page}`);
       const data = await response.json();
 
       resultsDiv.innerHTML = '';
