@@ -12,8 +12,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     try {
       const response = await fetch(`https://scriptblox.com/api/script/search?q=${searchInput}&scriptname=5&mode=${modeSelect}&page=${page}`);
-      const data = await response.json();
+      
+      // Check if the response is successful (status code 200)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
+      const data = await response.json();
+      console.log(data);  // Log the response to check its structure
+
+      // Clear previous results
       resultsDiv.innerHTML = '';
 
       if (data?.result?.scripts) {
@@ -30,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadMoreButton.style.display = 'none';
       }
     } catch (error) {
-      console.error('Error fetching scripts:', error);
+      console.error('Error fetching scripts:', error.message || error);
       resultsDiv.innerHTML = '<p>An error occurred while fetching scripts.</p>';
       loadMoreButton.style.display = 'none';
     }
@@ -61,13 +69,11 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     `;
 
-    // you can see what it does 
     const copyButton = scriptDiv.querySelector('.copy-button');
     copyButton.addEventListener('click', handleCopyButtonClick.bind(null, scriptDiv));
 
     return scriptDiv;
   }
-
 
   function handleCopyButtonClick(scriptDiv) {
     const scriptContent = scriptDiv.querySelector('#script-content');
